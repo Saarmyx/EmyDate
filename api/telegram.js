@@ -18,22 +18,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { emoji, title, description } = req.body || {}
+    // Captura completa de parámetros estructurales del frontend
+    const { emoji, title, description, date, time, note } = req.body || {}
 
-    if (!emoji || !title || !description) {
+    if (!emoji || !title || !description || !date || !time) {
       return res.status(400).json({
         success: false,
         message: 'Información incompleta.',
       })
     }
 
+    // Validaciones estrictas y sanitización anti-desbordamiento
     if (
       typeof emoji !== 'string' ||
       typeof title !== 'string' ||
       typeof description !== 'string' ||
+      typeof date !== 'string' ||
+      typeof time !== 'string' ||
       title.length > 200 ||
       description.length > 500 ||
-      emoji.length > 20
+      emoji.length > 20 ||
+      date.length > 20 ||
+      time.length > 20 ||
+      (note && (typeof note !== 'string' || note.length > 200))
     ) {
       return res.status(400).json({
         success: false,
@@ -49,25 +56,32 @@ export default async function handler(req, res) {
     const userAgent = req.headers['user-agent'] || 'Desconocido'
     const so = detectOS(userAgent)
 
-    const fecha = new Date().toLocaleString('es-CO', {
+    const fechaEnvio = new Date().toLocaleString('es-CO', {
       dateStyle: 'full',
       timeStyle: 'short',
       timeZone: 'America/Bogota',
     })
 
+    const bloqueNota = note ? `💬 Nota de Emy: "${note}"` : '💬 Nota de Emy: Sin comentarios.'
+
+    // Plantilla limpia y sin duplicaciones para Telegram
     const mensaje = [
-      '💌 Emily confirmó un plan ❤️',
+      '💌 ¡Emily confirmó una salida! ❤️',
       '━━━━━━━━━━━━━━━━━━',
-      `📍 ${title}`,
-      `${emoji} ${title}`,
-      `📝 ${description}`,
+      `📍 Plan: ${emoji} ${title}`,
+      `📝 Descripción: ${description}`,
       '━━━━━━━━━━━━━━━━━━',
-      `🕒 ${fecha}`,
-      `🌐 ${ip}`,
-      `📱 ${userAgent}`,
-      `💻 ${so}`,
+      '📅 PLANIFICACIÓN:',
+      `📆 Fecha: ${date}`,
+      `⏰ Hora sugerida: ${time}`,
+      ` ${bloqueNota}`,
       '━━━━━━━━━━━━━━━━━━',
-      '❤️ Ya puedes empezar a planear la cita.',
+      '⚙️ Detalles del sistema:',
+      `🕒 Enviado: ${fechaEnvio}`,
+      `🌐 IP: ${ip}`,
+      `💻 OS: ${so}`,
+      '━━━━━━━━━━━━━━━━━━',
+      '❤️ ¡Ya puedes empezar a preparar todo!',
     ].join('\n')
 
     const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`

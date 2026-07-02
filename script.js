@@ -2,10 +2,10 @@
   'use strict'
 
   const STORAGE_KEY = 'emily_plan_confirmado'
+  const NOTE_MAX_LENGTH = 150
 
   // ---------- Referencias ----------
   const garden = document.getElementById('garden')
-  const cardsContainer = document.getElementById('cards')
   const cards = Array.from(document.querySelectorAll('.card'))
   const confirmBar = document.getElementById('confirm')
   const confirmEmoji = document.getElementById('confirmEmoji')
@@ -22,6 +22,11 @@
   const modalCancel = document.getElementById('modalCancel')
   const modalConfirm = document.getElementById('modalConfirm')
   const modalError = document.getElementById('modalError')
+
+  const planDateInput = document.getElementById('planDate')
+  const planTimeInput = document.getElementById('planTime')
+  const planNoteInput = document.getElementById('planNote')
+  const charCounter = document.getElementById('charCounter')
 
   let selectedCard = null
   let isSubmitting = false
@@ -97,9 +102,19 @@
     garden.appendChild(svg)
   }
 
+  function getTodayISODate() {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const day = String(now.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
   // ---------- Selección de tarjetas ----------
   function selectCard(card) {
     if (isSubmitting) return
+    const isNewPlan = selectedCard !== card
+
     cards.forEach((c) => {
       c.classList.remove('selected')
       c.setAttribute('aria-pressed', 'false')
@@ -111,6 +126,8 @@
     confirmEmoji.textContent = card.dataset.emoji
     confirmTitle.textContent = card.dataset.title
     confirmBar.classList.add('show')
+
+    if (isNewPlan) resetModalFields()
 
     confirmBar.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }
@@ -127,12 +144,38 @@
     })
   }
 
+  // ---------- Campos del modal ----------
+  function resetModalFields() {
+    planDateInput.value = ''
+    planTimeInput.value = ''
+    planNoteInput.value = ''
+    updateCharCounter()
+    clearFieldErrors()
+  }
+
+  function updateCharCounter() {
+    charCounter.textContent = `${planNoteInput.value.length}/${NOTE_MAX_LENGTH}`
+  }
+
+  function clearFieldErrors() {
+    planDateInput.classList.remove('field-error')
+    planTimeInput.classList.remove('field-error')
+  }
+
+  function bindFieldEvents() {
+    planNoteInput.addEventListener('input', updateCharCounter)
+    planDateInput.addEventListener('input', () => planDateInput.classList.remove('field-error'))
+    planTimeInput.addEventListener('input', () => planTimeInput.classList.remove('field-error'))
+  }
+
   // ---------- Modal ----------
   function openModal() {
     if (!selectedCard) return
     modalEmoji.textContent = selectedCard.dataset.emoji
     modalPlanTitle.textContent = selectedCard.dataset.title
     modalError.hidden = true
+    clearFieldErrors()
+    planDateInput.min = getTodayISODate()
     lastFocusedBeforeModal = document.activeElement
 
     modalOverlay.hidden = false
@@ -161,22 +204,72 @@
     isSubmitting = state
     modalConfirm.disabled = state
     modalCancel.disabled = state
-    modalConfirm.querySelector('.btn-label').hidden = state
-    modalConfirm.querySelector('.spinner').hidden = !state
+
+    const label = modalConfirm.querySelector('.btn-label')
+    const spinner = modalConfirm.querySelector('.spinner')
+    if (label) label.hidden = state
+    if (spinner) spinner.hidden = !state
+
     confirmButton.disabled = state
+  }
+
+  function showModalError(message) {
+    modalError.textContent = message
+    modalError.hidden = false
+  }
+
+  // ---------- Validación ----------
+  function validatePlanDetails(dateValue, timeValue) {
+    if (!selectedCard) {
+      showModalError('Selecciona primero un plan.')
+      return false
+    }
+
+    let hasError = false
+
+    if (!dateValue) {
+      planDateInput.classList.add('field-error')
+      hasError = true
+    }
+    if (!timeValue) {
+      planTimeInput.classList.add('field-error')
+      hasError = true
+    }
+
+    if (hasError) {
+      showModalError('Por favor selecciona la fecha y la hora antes de confirmar.')
+      return false
+    }
+
+    if (dateValue < getTodayISODate()) {
+      planDateInput.classList.add('field-error')
+      showModalError('Por favor elige una fecha a partir de hoy.')
+      return false
+    }
+
+    return true
   }
 
   // ---------- Envío a la API ----------
   async function sendConfirmation() {
     if (!selectedCard || isSubmitting) return
 
-    setSubmitting(true)
+    const dateValue = planDateInput.value
+    const timeValue = planTimeInput.value
+    const noteValue = planNoteInput.value.trim().slice(0, NOTE_MAX_LENGTH)
+
     modalError.hidden = true
+    if (!validatePlanDetails(dateValue, timeValue)) return
+
+    setSubmitting(true)
 
     const payload = {
       emoji: selectedCard.dataset.emoji,
       title: selectedCard.dataset.title,
       description: selectedCard.dataset.desc,
+      date: dateValue,
+      time: timeValue,
+      note: noteValue,
     }
 
     try {
@@ -196,9 +289,7 @@
       closeModal()
       revealLetter()
     } catch (err) {
-      modalError.textContent =
-        'Algo salió mal enviando tu elección. Inténtalo de nuevo en un momento.'
-      modalError.hidden = false
+      showModalError('Algo salió mal enviando tu elección. Inténtalo de nuevo en un momento.')
       setSubmitting(false)
     }
   }
@@ -209,9 +300,7 @@
         STORAGE_KEY,
         JSON.stringify({ ...payload, confirmedAt: new Date().toISOString() }),
       )
-    } catch (e) {
-      /* localStorage no disponible: la confirmación sigue funcionando en esta sesión */
-    }
+    } catch (e) {}
   }
 
   function getStoredConfirmation() {
@@ -258,15 +347,17 @@
 
     setTimeout(() => {
       chooserSection.hidden = true
+      chooserSection.setAttribute('hidden', '')
       letterSection.hidden = false
+      letterSection.removeAttribute('hidden')
       letterSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }, 650)
   }
 
   function showLetterImmediately() {
-    chooserSection.hidden = true
-    letterSection.hidden = false
-    petalsLayer.classList.remove('show')
+    if (chooserSection) chooserSection.setAttribute('hidden', '')
+    if (letterSection) letterSection.removeAttribute('hidden')
+    if (petalsLayer) petalsLayer.classList.remove('show')
   }
 
   // ---------- Eventos globales ----------
@@ -279,11 +370,13 @@
     })
   }
 
-  // ---------- Inicio ----------
   function init() {
     buildGarden()
     bindCardEvents()
+    bindFieldEvents()
     bindGlobalEvents()
+    if (planDateInput) planDateInput.min = getTodayISODate()
+    updateCharCounter()
 
     const stored = getStoredConfirmation()
     if (stored) {
