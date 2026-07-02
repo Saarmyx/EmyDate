@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emy la eleccion es tuyaú</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="garden" id="garden" aria-hidden="true"></div>
+
+    <main class="wrap">
+        <p class="eyebrow">Una pequeña sorpresa para ti</p>
+
+        <h1 class="hero">Emy, <em>¿qué te gustaría hacer?</em></h1>
+
+        <p class="lead">
+            Preparé algunas ideas para nuestra próxima salida. Solo elige la que más te emocione, y yo me encargo del
+            resto. Porque,
+            al final, el mejor plan siempre es contigo.
+
+        </p>
+
+        <h2 class="section-title">muchos planes, una respuesta</h2>
+        <p class="section-sub">tu eligues la siguiente salida</p>
+
+        <div class="cards" id="cards">
+            <article class="card" data-plan="portal" data-emoji="🛍️" data-title="Tarde en Portal del Prado">
+                <span class="icon">🛍️</span>
+                <h3>Portal del Prado</h3>
+                <p>Pasear por el centro comercial, mirar tiendas, tomarnos algo y terminar con un postre.</p>
+
+                <span class="seal">🛍️</span>
+            </article>
+
+            <article class="card" data-plan="cafe" data-emoji="☕" data-title="Café para dos">
+                <span class="icon">☕</span>
+                <h3>Café + charla</h3>
+                <p>Un café tranquilo, conversar sin mirar el reloj y caminar un rato después.</p>
+
+                <span class="seal">☕</span>
+            </article>
+
+            <article class="card" data-plan="parque" data-emoji="🌳" data-title="Parque al atardecer">
+                <span class="icon">🌳</span>
+                <h3>Parque Washington</h3>
+                <p>Caminar entre los árboles, sentarnos un rato y disfrutar la tarde juntos.</p>
+
+                <span class="seal">🌳</span>
+            </article>
+
+            <article class="card" data-plan="mirador" data-emoji="🌇" data-title="Atardecer">
+                <span class="icon">🌇</span>
+                <h3>Mirador</h3>
+                <p>Ver cómo cae el sol sobre la ciudad mientras compartimos algo para comer.</p>
+
+                <span class="seal">🌇</span>
+            </article>
+
+            <article class="card" data-plan="cine" data-emoji="🎬" data-title="Cine">
+                <span class="icon">🎬</span>
+                <h3>Dia de Cine</h3>
+                <p>Escoger una película, compartir crispetas y salir a comentar cuál fue la mejor escena.</p>
+
+                <span class="seal">🎬</span>
+            </article>
+
+            <article class="card" data-plan="apto" data-emoji="🏠" data-title="Noche tranquila">
+                <span class="icon">🏠</span>
+                <h3>Noche en el apartamento</h3>
+                <p>Cocinamos algo rico entre los dos, ponemos una película y disfrutamos sin salir.</p>
+
+                <span class="seal">🏠</span>
+
+
+            </article>
+
+            <article class="card" data-plan="helado" data-emoji="🍦" data-title="Ir por un helado" tabindex="0"
+                role="button" aria-pressed="false">
+                <span class="icon">🍦</span>
+                <h3>Helado para dos</h3>
+                <p>Escoger nuestros sabores favoritos y caminar mientras nos ponemos al día.</p>
+                <span class="seal">🍦</span>
+            </article>
+
+            <article class="card" data-plan="restaurante" data-emoji="🍝" data-title="Salir a comer" tabindex="0"
+                role="button" aria-pressed="false">
+                <span class="icon">🍝</span>
+                <h3>Una buena comida</h3>
+                <p>Descubrir un restaurante nuevo o volver a uno que nos guste mucho.</p>
+                <span class="seal">🍝</span>
+            </article>
+            <article class="card" data-plan="bowling" data-emoji="🎳" data-title="Bowling" tabindex="0" role="button"
+                aria-pressed="false">
+                <span class="icon">🎳</span>
+                <h3>Una partida de bowling</h3>
+                <p>Competir un rato, reírnos de los lanzamientos malos y celebrar los buenos.</p>
+                <span class="seal">🎳</span>
+            </article>
+            <article class="card" data-plan="malecon" data-emoji="🌊" data-title="Malecón" tabindex="0" role="button"
+                aria-pressed="false">
+                <span class="icon">🌊</span>
+                <h3>Paseo por el Malecón</h3>
+                <p>Caminar junto al río, disfrutar la brisa y tomar muchas fotos juntos.</p>
+                <span class="seal">🌊</span>
+            </article>
+            <article class="card" data-plan="arcade" data-emoji="🕹️" data-title="Zona de juegos" tabindex="0"
+                role="button" aria-pressed="false">
+                <span class="icon">🕹️</span>
+                <h3>Arcade</h3>
+                <p>Retarnos en algunos juegos y descubrir quién tiene mejores reflejos.</p>
+                <span class="seal">🕹️</span>
+            </article>
+            <article class="card" data-plan="atardecer" data-emoji="📸" data-title="Fotos juntos" tabindex="0"
+                role="button" aria-pressed="false">
+                <span class="icon">📸</span>
+                <h3>Una tarde de fotos</h3>
+                <p>Buscar rincones bonitos, tomar muchas fotos y quedarnos con buenos recuerdos.</p>
+
+                <span class="seal">📸</span>
+            </article>
+        </div>
+
+        <div class="confirm" id="confirm">
+            <span class="stamp" id="confirmEmoji">🌿</span>
+            <h4 id="confirmTitle">Plan elegido</h4>
+            <p>Cuando quieras, cuadramos el día. Ya quedó sellado.</p>
+        </div>
+    </main>
+
+    <footer>Hecho con cariño para mi niña 🖤</footer>
+
+    <script>
+        (function () {
+            // ---------- Jardín SVG generado por JS ----------
+            const garden = document.getElementById('garden');
+            const NS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(NS, "svg");
+            svg.setAttribute("viewBox", "0 0 1000 1000");
+            svg.setAttribute("preserveAspectRatio", "xMidYMax slice");
+
+            function sprig(x, y, scale, flip) {
+                const g = document.createElementNS(NS, "g");
+                g.setAttribute("class", "sprig");
+                g.setAttribute("transform", `translate(${x} ${y}) scale(${flip ? -scale : scale} ${scale})`);
+
+                const stem = document.createElementNS(NS, "path");
+                stem.setAttribute("d", "M0,0 C -4,-30 6,-55 -2,-90");
+                g.appendChild(stem);
+
+                const leafPaths = ["M0,-25 C -18,-30 -22,-45 -8,-52 C -2,-42 0,-33 0,-25 Z",
+                    "M-2,-55 C 16,-58 22,-72 10,-80 C 2,-72 -2,-63 -2,-55 Z"];
+                leafPaths.forEach(d => {
+                    const leaf = document.createElementNS(NS, "path");
+                    leaf.setAttribute("d", d);
+                    leaf.setAttribute("fill", "rgba(138,154,126,0.35)");
+                    leaf.setAttribute("stroke", "none");
+                    g.appendChild(leaf);
+                });
+
+                const bloom = document.createElementNS(NS, "circle");
+                bloom.setAttribute("cx", -2);
+                bloom.setAttribute("cy", -90);
+                bloom.setAttribute("r", 5.5);
+                bloom.setAttribute("class", Math.random() > 0.5 ? "bloom" : "bloom-alt");
+                g.appendChild(bloom);
+
+                for (let i = 0; i < 5; i++) {
+                    const petal = document.createElementNS(NS, "ellipse");
+                    const angle = (i / 5) * Math.PI * 2;
+                    petal.setAttribute("cx", -2 + Math.cos(angle) * 9);
+                    petal.setAttribute("cy", -90 + Math.sin(angle) * 9);
+                    petal.setAttribute("rx", 6);
+                    petal.setAttribute("ry", 3.5);
+                    petal.setAttribute("transform", `rotate(${angle * 180 / Math.PI} ${-2 + Math.cos(angle) * 9} ${-90 + Math.sin(angle) * 9})`);
+                    petal.setAttribute("fill", "none");
+                    petal.setAttribute("stroke", "rgba(216,167,160,0.55)");
+                    petal.setAttribute("stroke-width", "1");
+                    g.appendChild(petal);
+                }
+
+                return g;
+            }
+
+            const placements = [
+                [40, 1000, 1.1, false], [110, 1005, 0.8, true], [180, 998, 1.4, false],
+                [860, 1000, 1.2, true], [930, 1005, 0.9, false], [960, 995, 1.5, true],
+                [500, 1010, 0.7, false], [30, 990, 0.6, true], [970, 990, 0.65, false]
+            ];
+            placements.forEach(p => svg.appendChild(sprig(...p)));
+            garden.appendChild(svg);
+
+            // ---------- Selección de tarjetas ----------
+            const cards = document.querySelectorAll('.card');
+            const confirm = document.getElementById('confirm');
+            const confirmEmoji = document.getElementById('confirmEmoji');
+            const confirmTitle = document.getElementById('confirmTitle');
+
+            function selectCard(card) {
+                cards.forEach(c => {
+                    c.classList.remove('selected');
+                    c.setAttribute('aria-pressed', 'false');
+                });
+                card.classList.add('selected');
+                card.setAttribute('aria-pressed', 'true');
+
+                confirmEmoji.textContent = card.dataset.emoji;
+                confirmTitle.textContent = card.dataset.title;
+                confirm.classList.add('show');
+
+                try { localStorage.setItem('emily_plan_elegido', card.dataset.plan); } catch (e) { }
+
+                confirm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            cards.forEach(card => {
+                card.addEventListener('click', () => selectCard(card));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectCard(card);
+                    }
+                });
+            });
+
+            // Restaurar selección previa
+            try {
+                const saved = localStorage.getItem('emily_plan_elegido');
+                if (saved) {
+                    const match = document.querySelector(`.card[data-plan="${saved}"]`);
+                    if (match) selectCard(match);
+                }
+            } catch (e) { }
+        })();
+    </script>
+
+</body>
+
+</html>
