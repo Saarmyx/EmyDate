@@ -1,7 +1,6 @@
 ;(function () {
   'use strict'
 
-  const STORAGE_KEY = 'emily_plan_confirmado'
   const NOTE_MAX_LENGTH = 150
 
   // ---------- Referencias ----------
@@ -285,30 +284,12 @@
         throw new Error(data.message || 'No se pudo enviar la confirmación.')
       }
 
-      persistConfirmation(payload)
+      // MODIFICACIÓN: Ya no guardamos en localStorage para permitir múltiples intentos
       closeModal()
       revealLetter()
     } catch (err) {
       showModalError('Algo salió mal enviando tu elección. Inténtalo de nuevo en un momento.')
       setSubmitting(false)
-    }
-  }
-
-  function persistConfirmation(payload) {
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({ ...payload, confirmedAt: new Date().toISOString() }),
-      )
-    } catch (e) {}
-  }
-
-  function getStoredConfirmation() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      return raw ? JSON.parse(raw) : null
-    } catch (e) {
-      return null
     }
   }
 
@@ -351,13 +332,42 @@
       letterSection.hidden = false
       letterSection.removeAttribute('hidden')
       letterSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+      // NUEVO: Habilitamos un botón oculto para que pueda volver a elegir sin recargar la página
+      const restartBtn = document.getElementById('restartHint')
+      if (restartBtn) {
+        restartBtn.textContent = '🌸 Elegir otro plan'
+        restartBtn.removeAttribute('disabled')
+        restartBtn.addEventListener('click', resetUX)
+      }
     }, 650)
   }
 
-  function showLetterImmediately() {
-    if (chooserSection) chooserSection.setAttribute('hidden', '')
-    if (letterSection) letterSection.removeAttribute('hidden')
-    if (petalsLayer) petalsLayer.classList.remove('show')
+  // NUEVA FUNCIÓN: Permite regresar al catálogo de opciones de inmediato
+  function resetUX() {
+    isSubmitting = false
+    setSubmitting(false)
+
+    letterSection.setAttribute('hidden', '')
+    letterSection.hidden = true
+
+    if (petalsLayer) {
+      petalsLayer.classList.remove('show')
+      petalsLayer.innerHTML = ''
+    }
+
+    chooserSection.removeAttribute('hidden')
+    chooserSection.hidden = false
+    chooserSection.classList.remove('fading-out')
+
+    if (selectedCard) {
+      selectedCard.classList.remove('selected')
+      selectedCard.setAttribute('aria-pressed', 'false')
+      selectedCard = null
+    }
+
+    confirmBar.classList.remove('show')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   // ---------- Eventos globales ----------
@@ -378,10 +388,8 @@
     if (planDateInput) planDateInput.min = getTodayISODate()
     updateCharCounter()
 
-    const stored = getStoredConfirmation()
-    if (stored) {
-      showLetterImmediately()
-    }
+    // MODIFICACIÓN: Ya no verificamos el localStorage al cargar la página.
+    // Siempre mostrará el catálogo disponible.
   }
 
   document.addEventListener('DOMContentLoaded', init)
