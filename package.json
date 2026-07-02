@@ -1,5 +1,12 @@
 {
   "name": "emy-date",
+  "version": "1.0.0",
   "private": true,
-  "version": "1.0.0"
+  "description": "Experiencia romántica para que Emily elija y confirme su próxima cita.",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "vercel dev"
+  }
 }

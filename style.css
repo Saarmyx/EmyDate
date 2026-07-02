@@ -36,6 +36,7 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -85,9 +86,42 @@ body {
   100% {
     transform: rotate(-1.2deg);
   }
-
   50% {
     transform: rotate(1.2deg);
+  }
+}
+
+/* ---------- Pétalos flotantes (confirmación) ---------- */
+.petals {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.petals.show {
+  opacity: 1;
+}
+
+.petal {
+  position: absolute;
+  top: -10%;
+  font-size: 1.2rem;
+  animation: fall linear forwards;
+  will-change: transform;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(var(--drift, 40px), 115vh, 0) rotate(320deg);
+    opacity: 0.15;
   }
 }
 
@@ -162,6 +196,18 @@ p.section-sub {
   margin: 0 0 3rem;
 }
 
+#chooserSection {
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+#chooserSection.fading-out {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+}
+
 /* ---------- Tarjetas ---------- */
 .cards {
   display: grid;
@@ -180,7 +226,8 @@ p.section-sub {
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease,
-    border-color 0.35s ease;
+    border-color 0.35s ease,
+    opacity 0.5s ease;
   outline-offset: 4px;
 }
 
@@ -192,6 +239,11 @@ p.section-sub {
 
 .card:focus-visible {
   outline: 2px solid var(--sage-dark);
+}
+
+.card.locked {
+  cursor: default;
+  pointer-events: none;
 }
 
 .card .icon {
@@ -212,18 +264,6 @@ p.section-sub {
   line-height: 1.6;
   color: rgba(70, 57, 62, 0.65);
   margin: 0;
-}
-
-.card .price {
-  display: inline-block;
-  margin-top: 1rem;
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-  border-top: 1px solid var(--line);
-  padding-top: 0.7rem;
-  width: 100%;
 }
 
 /* sello / sticker */
@@ -259,7 +299,7 @@ p.section-sub {
   color: var(--rose-deep);
 }
 
-/* ---------- Confirmación ---------- */
+/* ---------- Confirmación (banda inferior con botón) ---------- */
 .confirm {
   margin-top: 4rem;
   text-align: center;
@@ -300,6 +340,212 @@ p.section-sub {
   font-size: 0.85rem;
   color: rgba(70, 57, 62, 0.62);
   margin: 0;
+}
+
+.confirm-btn {
+  margin-top: 25px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: var(--rose-deep);
+  color: #fff;
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.confirm-btn:hover {
+  transform: translateY(-2px);
+  background: #b97770;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.confirm-btn.ghost {
+  background: transparent;
+  color: var(--rose-deep);
+  border: 1px solid var(--rose-deep);
+}
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vw;
+  background: rgba(70, 57, 62, 0.32);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+}
+
+.modal {
+  background: var(--ivory);
+  max-width: 420px;
+  width: 100%;
+  padding: 2.6rem 2rem 2.2rem;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 30px 60px -20px rgba(70, 57, 62, 0.35);
+  transform: translateY(14px) scale(0.98);
+  transition: transform 0.35s ease;
+}
+
+.modal-overlay.show .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-emoji {
+  font-size: 1.8rem;
+  margin: 0 0 0.8rem;
+}
+
+.modal h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.35;
+  margin: 0 0 0.8rem;
+}
+
+.modal-plan {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--sage-dark);
+  margin: 0 0 1.8rem;
+  text-transform: uppercase;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.9rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.modal-btn {
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-width: 130px;
+  justify-content: center;
+}
+
+.modal-btn.ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--plum);
+}
+
+.modal-btn.ghost:hover {
+  border-color: var(--sage-dark);
+}
+
+.modal-btn.primary {
+  background: var(--rose-deep);
+  color: #fff;
+}
+
+.modal-btn.primary:hover:not(:disabled) {
+  background: #b97770;
+}
+
+.modal-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.modal-error {
+  margin: 1.1rem 0 0;
+  font-size: 0.78rem;
+  color: var(--rose-deep);
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: #fff;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Carta final ---------- */
+.letter {
+  max-width: 480px;
+  margin: 4vh auto 0;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  box-shadow: 0 24px 50px -24px var(--shadow);
+  opacity: 0;
+  transform: translateY(16px);
+  animation: letterIn 0.9s ease forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes letterIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.letter-stamp {
+  display: block;
+  font-size: 2.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.letter-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--plum);
+  margin: 0 0 0.7rem;
+}
+
+.letter-close {
+  font-style: italic;
+  color: var(--rose-deep);
+  margin-top: 1.2rem;
 }
 
 footer {
