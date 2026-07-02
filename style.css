@@ -24,7 +24,7 @@ body {
   min-height: 100vh;
   background: var(--ivory);
   color: var(--plum);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 300;
   position: relative;
   overflow-x: hidden;
@@ -155,7 +155,7 @@ body {
 }
 
 h1.hero {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Inter', serif;
   font-weight: 500;
   text-align: center;
   font-size: clamp(2.6rem, 7vw, 4.6rem);
@@ -165,7 +165,6 @@ h1.hero {
 }
 
 h1.hero em {
-  font-style: italic;
   color: var(--rose-deep);
 }
 
@@ -179,8 +178,8 @@ p.lead {
 }
 
 h2.section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
+  font-family: 'Inter', serif;
+
   font-weight: 500;
   text-align: center;
   font-size: clamp(1.4rem, 3vw, 1.9rem);
@@ -253,7 +252,7 @@ p.section-sub {
 }
 
 .card h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Inter', serif;
   font-weight: 600;
   font-size: 1.35rem;
   margin: 0 0 0.55rem;
@@ -329,8 +328,8 @@ p.section-sub {
 }
 
 .confirm h4 {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
+  font-family: 'Inter', serif;
+
   font-weight: 500;
   font-size: 1.4rem;
   margin: 0 0 0.4rem;
@@ -350,7 +349,7 @@ p.section-sub {
   cursor: pointer;
   background: var(--rose-deep);
   color: #fff;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 500;
   transition: 0.3s;
@@ -421,9 +420,9 @@ p.section-sub {
 }
 
 .modal h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Inter', serif;
   font-weight: 500;
-  font-style: italic;
+
   font-size: 1.5rem;
   line-height: 1.35;
   margin: 0 0 0.8rem;
@@ -447,7 +446,7 @@ p.section-sub {
 .modal-btn {
   padding: 12px 26px;
   border-radius: 999px;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -535,7 +534,7 @@ p.section-sub {
 }
 
 .letter-line {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Inter', serif;
   font-size: 1.25rem;
   line-height: 1.7;
   color: var(--plum);
@@ -543,7 +542,6 @@ p.section-sub {
 }
 
 .letter-close {
-  font-style: italic;
   color: var(--rose-deep);
   margin-top: 1.2rem;
 }
